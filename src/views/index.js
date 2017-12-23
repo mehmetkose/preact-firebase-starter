@@ -1,24 +1,37 @@
-import { h } from 'preact'
-import { Router } from 'preact-router';
+import { h, Component } from 'preact'
+import { Router, route} from 'preact-router'
+import { auth, defaultDatabase } from '../firebase'
 
 import Home from './pages/home';
 import Layout from './tags/layout';
 import Article from './pages/article';
 import Error404 from './pages/errors/404';
-import Credit from './pages/credit';
 import Blog from './pages/blog';
 
-// track pages on route change
 const onChange = obj => window.ga && ga.send('pageview', { dp:obj.url });
 
-export default (
-	<Layout>
-		<Router onChange={ onChange }>
-			<Home path="/" />
-			<Blog path="/blog" />
-			<Article path="/blog/:title" />
-			<Credit path="/credit" />
-			<Error404 default />
-		</Router>
-	</Layout>
-);
+
+export default class App extends Component {
+	constructor(props){
+			super(props)
+			this.state = {
+				user: null,
+				updateMainState: this.updateMainState.bind(this),
+			}
+	}
+	updateMainState(object_to_set){
+			this.setState(object_to_set)
+	}
+	render() {
+		return (
+			<Layout>
+				<Router onChange={ onChange }>
+					<Home path="/" {...this.state} />
+					<Blog path="/blog" {...this.state} />
+					<Article path="/blog/:title" {...this.state} />
+					<Error404 default {...this.state} />
+				</Router>
+			</Layout>
+		)
+  }
+}

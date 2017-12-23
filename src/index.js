@@ -1,14 +1,10 @@
-import { render } from 'preact';
+
+import { h, render } from 'preact';
 import GAnalytics from 'ganalytics';
 import './index.sass';
 
-let elem, App;
-function init() {
-	App = require('./views').default;
-	elem = render(App, document.getElementById('root'), elem);
-}
-
-init();
+import App from './views';
+var elem = render(<App/>, document.body, elem);
 
 if (process.env.NODE_ENV === 'production') {
 	// cache all assets if browser supports serviceworker
